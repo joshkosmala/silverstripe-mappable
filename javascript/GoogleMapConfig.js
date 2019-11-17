@@ -1,5 +1,5 @@
 $(function () {
-   // initialise
+    // initialise
     initialize();
 });
 
@@ -7,7 +7,7 @@ var markers = [];
 
 function initialize() {
 
-   // set viewport for device (see below)
+    // set viewport for device (see below)
     detectBrowser();
 
     // default to New Zealand TODO: make this a part of the admin
@@ -21,19 +21,18 @@ function initialize() {
     };
     // get the map element
     var map = new google.maps.Map(document.getElementById("map_canvas"), mapInitialView);
-
     // construct infowindow
     var infowindow = new google.maps.InfoWindow({
         content: ''
     });
-
+    debugger;
     // the ajax object, populated with address and infoWindow
     $.ajax({
         url: window.location.href + 'locationData',
+        // url: 'http://localhost:9981/locationData',
         type: 'GET',
         success: function (result) {
             var locations = JSON.parse(result);
-
             for (var i = 0, length = locations.length; i < length; i++) {
 
                 var locationData = locations[i];
@@ -60,7 +59,7 @@ function detectBrowser() {
 }
 
 function addMarkerWithTimeout(position, map, infowindow, location, timeout) {
-   // google restricts the amount of requests per second, dropping with a timeout gets past this
+    // google restricts the amount of requests per second, dropping with a timeout gets past this
     window.setTimeout(function () {
         var marker = new google.maps.Marker({
             position: position,
@@ -73,7 +72,7 @@ function addMarkerWithTimeout(position, map, infowindow, location, timeout) {
 }
 
 function bindInfoWindow(marker, map, infowindow, description) {
-   // bind the infowindow to the marker
+    // bind the infowindow to the marker
     google.maps.event.addListener(marker, 'click', function () {
         infowindow.setContent(description);
         infowindow.open(map, marker);

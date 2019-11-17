@@ -26,21 +26,21 @@ class LocationMapPage_Controller extends Page_Controller {
 
 	public function locationData() {
 		// Get the locations from the database, exclude any that don't have LatLng's defined
-		$infoWindowList = Location::get()->exclude(array('lat' => null, 'lng' => null));
-		if ($infoWindowList) {
-			$InfoWindows = array();
-			foreach ($infoWindowList as $obj) {
-				$InfoWindows[] = array(
-					'lat' => $obj->lat,
-					'lng' => $obj->lng,
-					'info' => $obj->Name . "<br />" . $obj->InfoWindow
-				);
-			}
-			$InfoWindows = Convert::array2json($InfoWindows);
-			// Return a JSON object for GoogleMapConfig.js to use
-			return $InfoWindows;
-
-		}
+//		$infoWindowList = Location::get()->exclude(array('lat' => null, 'lng' => null));
+		$infoWindowList = Location::get();
+        if ($infoWindowList) {
+            $InfoWindows = array();
+            foreach ($infoWindowList as $obj) {
+                $InfoWindows[] = array(
+                    'lat' => $obj->lat,
+                    'lng' => $obj->lng,
+                    'info' => $obj->Name . "<br />" . $obj->InfoWindow
+                );
+            }
+            $InfoWindowsJson = Convert::array2json($InfoWindows);
+            // Return a JSON object for GoogleMapConfig.js to use
+            return $InfoWindowsJson;
+        }
 	}
 
 	public function Map() {
