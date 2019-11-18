@@ -13,8 +13,7 @@
   },
   "require": {
     "silverstripe/cms": "~3.1",
-    "silverstripe/framework": "~3.1",
-    "silverstripe-australia/gridfieldextensions": "*"
+    "silverstripe/framework": "~3.1"
   },
   "extra": {
     "installer-name": "mappable"
