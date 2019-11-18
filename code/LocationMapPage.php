@@ -26,8 +26,8 @@ class LocationMapPage_Controller extends Page_Controller {
 
     public function locationData() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
-		$infoWindowList = Location::get()->exclude(array('lat' => null, 'lng' => null));
-//        $infoWindowList = Location::get();
+//		$infoWindowList = Location::get()->exclude(array('lat' => null, 'lng' => null));
+        $infoWindowList = Location::get();
         if ($infoWindowList) {
             $InfoWindows = array();
             foreach ($infoWindowList as $obj) {
