@@ -25,11 +25,10 @@ function initialize() {
     var infowindow = new google.maps.InfoWindow({
         content: ''
     });
-    debugger;
     // the ajax object, populated with address and infoWindow
     $.ajax({
-        url: window.location.href + 'locationData',
-        // url: 'http://localhost:9981/locationData',
+        // url: window.location.href + 'locationData',
+        url: 'http://localhost:9981/new-location-map-page-2/locationData',
         type: 'GET',
         success: function (result) {
             var locations = JSON.parse(result);
