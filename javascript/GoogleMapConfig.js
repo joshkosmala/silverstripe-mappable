@@ -36,23 +36,8 @@ function initialize() {
         scale: iconSize
     }
 
-    var marker = new google.maps.Marker({
-        position: new google.maps.LatLng('-35.281810', '174.091573'),
-        map: map,
-        draggable: false,
-        icon: icon,
-        zIndex : -20
-    });
-    var marker2 = new google.maps.Marker({
-        position: new google.maps.LatLng('-35.167780', '173.152070'),
-        map: map,
-        draggable: false,
-        icon: icon,
-        zIndex : -20
-    });
-
-    map.panTo(new google.maps.LatLng('-35.281810', '174.091573'));
-    map.panTo(new google.maps.LatLng('-35.167780', '173.152070'));
+    // map.panTo(new google.maps.LatLng('-35.281810', '174.091573'));
+    // map.panTo(new google.maps.LatLng('-35.167780', '173.152070'));
 
     // construct infowindow
     var infowindow = new google.maps.InfoWindow({
@@ -60,16 +45,25 @@ function initialize() {
     });
     // the ajax object, populated with address and infoWindow
     $.ajax({
-        url: window.location.href + 'locationData',
+        url: window.location.href +'/new-location-map-page-2/locationData',
         type: 'GET',
         success: function (result) {
             var locations = JSON.parse(result);
             for (var i = 0, length = locations.length; i < length; i++) {
 
                 var locationData = locations[i];
-                var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);
+                new google.maps.Marker({
+                    position: new google.maps.LatLng(locationData.lat, locationData.lng),
+                    map: map,
+                    draggable: false,
+                    icon: icon,
+                    zIndex : -20
+                });
+                // map.panTo(new google.maps.LatLng(locationData.lat, locationData.lng));
+
+                // var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);
                 // drop the marker on the map
-                addMarkerWithTimeout(latLng, map, infowindow, locationData, i * 100);
+                // addMarkerWithTimeout(latLng, map, infowindow, locationData, i * 100);
             }
         }
     });
