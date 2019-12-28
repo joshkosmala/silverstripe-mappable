@@ -34,7 +34,8 @@ class LocationMapPage_Controller extends Page_Controller {
                 $InfoWindows[] = array(
                     'lat' => $obj->lat,
                     'lng' => $obj->lng,
-                    'info' => $obj->Name . "<br />" . $obj->InfoWindow
+                    'info' => $obj->Name . "<br />" . $obj->InfoWindow,
+                    'iconSize' => $obj->IconSize
                 );
             }
             $InfoWindowsJson = Convert::array2json($InfoWindows);

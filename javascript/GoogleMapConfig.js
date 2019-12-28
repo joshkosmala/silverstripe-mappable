@@ -22,19 +22,8 @@ function initialize() {
     // get the map element
     var polyLine;
     var polyOptions;
-    var iconSize = 1.5;
 
     var map = new google.maps.Map(document.getElementById("map_canvas"), mapInitialView);
-
-    var icon = {
-
-        path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
-        fillColor: '#3785ff',
-        fillOpacity: .6,
-        anchor: new google.maps.Point(0,0),
-        strokeWeight: 0,
-        scale: iconSize
-    }
 
     // map.panTo(new google.maps.LatLng('-35.281810', '174.091573'));
     // map.panTo(new google.maps.LatLng('-35.167780', '173.152070'));
@@ -52,6 +41,17 @@ function initialize() {
             for (var i = 0, length = locations.length; i < length; i++) {
 
                 var locationData = locations[i];
+                debugger;
+                var icon = {
+
+                    path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
+                    fillColor: '#3785ff',
+                    fillOpacity: .6,
+                    anchor: new google.maps.Point(0,0),
+                    strokeWeight: 0,
+                    scale: parseFloat(locationData.iconSize)
+                };
+
                 new google.maps.Marker({
                     position: new google.maps.LatLng(locationData.lat, locationData.lng),
                     map: map,

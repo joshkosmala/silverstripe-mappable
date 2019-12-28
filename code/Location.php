@@ -13,6 +13,7 @@ class Location extends DataObject {
 		'InfoWindow' => 'HTMLText',
 		'lat' => 'Double',
 		'lng' => 'Double',
+		'IconSize' => 'Double',
 	);
 
 	public static $summary_fields = array(
@@ -34,6 +35,7 @@ class Location extends DataObject {
 		$infoWindow->setRows(8); // limit the height of the editor
 		$fields->addFieldToTab('Root.Main', new TextField('lat', 'Latitude', $this->lat), 'InfoWindow');
 		$fields->addFieldToTab('Root.Main', new TextField('lng', 'Longitude', $this->lng), 'InfoWindow');
+		$fields->addFieldToTab('Root.Main', new TextField('IconSize', 'Icon size', $this->lng), 'InfoWindow');
 
 		return $fields;
 	}
