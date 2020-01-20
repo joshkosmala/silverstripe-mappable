@@ -21,12 +21,36 @@ class LocationMapPage_Controller extends Page_Controller {
     }
 
     private static $allowed_actions = array(
-        'locationData'
+        'locationData', 'test'
     );
+
+    public function test() {
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address=1williamsrodadpaihia';
+
+        //Use file_get_contents to GET the URL in question.
+        $contents = file_get_contents($url);
+
+        $arr = json_decode($contents, true);
+        $lat = '';
+        foreach ($arr['results'] as $element) {
+            $geometry = $element['geometry'];
+            $location = $geometry['location'];
+        }
+
+        //If $contents is not a boolean FALSE value.
+//        if($contents !== false){
+//            //Print out the contents.
+//        }
+
+//        return json_encode($location);
+        return $location;
+    }
 
     public function locationData() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
 		$infoWindowList = Location::get();
+        $test = $this->test();
+
 //        $infoWindowList = Location::get();
         if ($infoWindowList) {
             $InfoWindows = array();
