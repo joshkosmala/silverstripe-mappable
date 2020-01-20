@@ -24,6 +24,32 @@ class LocationMapPage_Controller extends Page_Controller {
         'locationData', 'test'
     );
 
+    public function getImportAddressFile($file) {
+        $address = array();
+        foreach ()
+    }
+
+    public function getRanges() {
+        // Get the locations from the database, exclude any that don't have LatLng's defined
+        $infoWindowList = Location::get();
+        $test = $this->getLocationFromAdress('tauranga');
+
+        if ($infoWindowList) {
+            $InfoWindows = array();
+            foreach ($infoWindowList as $obj) {
+                $InfoWindows[] = array(
+                    'lat' => $test['lat'],
+                    'lng' => $test['lng'],
+                    'info' => $obj->Name . "<br />" . $obj->InfoWindow,
+                    'iconSize' => $obj->IconSize
+                );
+            }
+            $InfoWindowsJson = Convert::array2json($InfoWindows);
+            // Return a JSON object for GoogleMapConfig.js to use
+            return $InfoWindowsJson;
+        }
+    }
+
     public function getLocationFromAdress($address) {
         if (empty($address)) {
             return;
@@ -52,15 +78,13 @@ class LocationMapPage_Controller extends Page_Controller {
     public function locationData() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
 		$infoWindowList = Location::get();
-        $test = $this->getLocationFromAdress('tauranga');
 
-//        $infoWindowList = Location::get();
         if ($infoWindowList) {
             $InfoWindows = array();
             foreach ($infoWindowList as $obj) {
                 $InfoWindows[] = array(
-                    'lat' => $test['lat'],
-                    'lng' => $test['lng'],
+                    'lat' => $obj->lat,
+                    'lng' => $obj->lng,
                     'info' => $obj->Name . "<br />" . $obj->InfoWindow,
                     'iconSize' => $obj->IconSize
                 );
