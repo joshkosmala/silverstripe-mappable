@@ -21,18 +21,46 @@ class LocationMapPage_Controller extends Page_Controller {
     }
 
     private static $allowed_actions = array(
-        'locationData', 'test'
+        'locationData', 'importAddressFile'
     );
 
-    public function getImportAddressFile($file) {
-        $address = array();
-        foreach ()
+    public function importAddressFile() {
+        $separator  =   ';';
+        $enclosure  =   '"';
+
+        $max_row_size   =   4096;
+        $fh = fopen($_POST["file"], 'r');
+        $text = "";
+        while(($row = fgetcsv($fh, $this->max_row_size, $separator, $enclosure))){
+            $text.= json_encode($row);
+        }
+        return $text;
+
+//
+//
+//
+//        if(empty($_POST["file"])){
+//            return json_encode("1111");
+//        }
+//        if ($fh = fopen($_POST["file"], 'r')) {
+//            while (!feof($fh)) {
+//                $line = fgets($fh);
+//                return json_encode($line);
+//            }
+//            fclose($fh);
+////        }
+////        $address = array();
+////        foreach ($address as $obj){
+////
+//        }
+//        return json_encode("11111");
     }
 
     public function getRanges() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
         $infoWindowList = Location::get();
-        $test = $this->getLocationFromAdress('tauranga');
+        //uses + between words on address
+        $test = $this->getLocationFromAddress('Little+Queen+St+Russel');
 
         if ($infoWindowList) {
             $InfoWindows = array();
@@ -50,7 +78,7 @@ class LocationMapPage_Controller extends Page_Controller {
         }
     }
 
-    public function getLocationFromAdress($address) {
+    public function getLocationFromAddress($address) {
         if (empty($address)) {
             return;
         }
