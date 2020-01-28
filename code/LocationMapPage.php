@@ -24,36 +24,36 @@ class LocationMapPage_Controller extends Page_Controller {
         'locationData', 'importAddressFile'
     );
 
-    public function importAddressFile() {
-        $separator  =   ';';
-        $enclosure  =   '"';
+    public function importAddressFile()
+    {
+        $conn = mysqli_connect("localhost", "root", "root", "subbase");
 
-        $max_row_size   =   4096;
-        $fh = fopen($_POST["file"], 'r');
-        $text = "";
-        while(($row = fgetcsv($fh, $this->max_row_size, $separator, $enclosure))){
-            $text.= json_encode($row);
+        if (isset($_POST["file"])) {
+
+            $fileName = $_POST["file"];
+
+            $file = fopen($fileName, "r");
+
+            $index = 0;
+            while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
+                if ($column[0] == 'Type' || $column[0] == 'First Name' ) {
+                    continue;
+                }
+
+                $sqlInsert = "INSERT into Northtel_Clients (name, email, phone_number, address, city)
+                   values ('" . $column[0] . "','" . $column[1] . "','" . $column[2] . "','" . $column[5] . "','" . $column[6] . "')";
+                $result = mysqli_query($conn, $sqlInsert);
+
+                if (!empty($result)) {
+                    $type = "success";
+                    $message = "CSV Data Imported into the Database";
+                } else {
+                    $type = "error";
+                    $message = "Problem in Importing CSV Data";
+                }
+            }
         }
-        return $text;
-
-//
-//
-//
-//        if(empty($_POST["file"])){
-//            return json_encode("1111");
-//        }
-//        if ($fh = fopen($_POST["file"], 'r')) {
-//            while (!feof($fh)) {
-//                $line = fgets($fh);
-//                return json_encode($line);
-//            }
-//            fclose($fh);
-////        }
-////        $address = array();
-////        foreach ($address as $obj){
-////
-//        }
-//        return json_encode("11111");
+        fclose($file);
     }
 
     public function getRanges() {
