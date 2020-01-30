@@ -34,23 +34,33 @@ class LocationMapPage_Controller extends Page_Controller {
 
             $file = fopen($fileName, "r");
 
-            $index = 0;
             while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
-                if ($column[0] == 'Type' || $column[0] == 'First Name' ) {
+                if ($column[0] == 'Type' || $column[0] == 'First Name' || $column[0] == 'Name') {
                     continue;
                 }
 
-                $sqlInsert = "INSERT into Northtel_Clients (name, email, phone_number, address, city)
-                   values ('" . $column[0] . "','" . $column[1] . "','" . $column[2] . "','" . $column[5] . "','" . $column[6] . "')";
-                $result = mysqli_query($conn, $sqlInsert);
-
-                if (!empty($result)) {
-                    $type = "success";
-                    $message = "CSV Data Imported into the Database";
-                } else {
-                    $type = "error";
-                    $message = "Problem in Importing CSV Data";
+                $name = $column[0];
+                if (!empty($column[0])) {
+                    $name = strstr($column[0], "'") ? str_replace("'", "''", $column[0]) : $column[0];
                 }
+                $northtelClients = NorthtelClients::get()->where(" Name = '" . $name . "' OR Email = '" . $column[1] . "'")->exists();
+                if (!$northtelClients) {
+                    $sqlInsert = "INSERT into NorthtelClients (Name, Email, PhoneNumber, Address, City)
+                   values ('" . $name . "','" . $column[1] . "','" . $column[2] . "','" . $column[5] . "','" . $column[6] . "')";
+                    $result = mysqli_query($conn, $sqlInsert);
+
+                    if (!empty($result)) {
+                        $type = "success";
+                        $message = "CSV Data Imported into the Database";
+                    } else {
+                        $type = "error";
+                        $message = "Problem in Importing CSV Data";
+                    }
+                } else {
+                    continue;
+                }
+
+
             }
         }
         fclose($file);
