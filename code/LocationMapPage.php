@@ -21,7 +21,7 @@ class LocationMapPage_Controller extends Page_Controller {
     }
 
     private static $allowed_actions = array(
-        'locationData', 'importAddressFile'
+        'locationData', 'importAddressFile', 'getLocationFromAddress'
     );
 
     public function importAddressFile()
@@ -66,20 +66,20 @@ class LocationMapPage_Controller extends Page_Controller {
         fclose($file);
     }
 
-    public function getRanges() {
+    public function locationData() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
-        $infoWindowList = Location::get();
-        //uses + between words on address
-        $test = $this->getLocationFromAddress('Little+Queen+St+Russel');
+        $infoWindowList = NorthtelClients::get();
 
         if ($infoWindowList) {
             $InfoWindows = array();
             foreach ($infoWindowList as $obj) {
+                if (empty($obj->Address)) continue;
+                $test = $this->getLocationFromAddress($obj->Address);
                 $InfoWindows[] = array(
                     'lat' => $test['lat'],
                     'lng' => $test['lng'],
                     'info' => $obj->Name . "<br />" . $obj->InfoWindow,
-                    'iconSize' => $obj->IconSize
+                    'iconSize' => "0.6"
                 );
             }
             $InfoWindowsJson = Convert::array2json($InfoWindows);
@@ -92,12 +92,18 @@ class LocationMapPage_Controller extends Page_Controller {
         if (empty($address)) {
             return;
         }
+        //uses + between words on address
+        $address = strstr($address, " ") ? str_replace(" ", "+", $address) : $address;
+
         $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address;
 
         //Use file_get_contents to GET the URL in question.
         $contents = file_get_contents($url);
 
         $arr = json_decode($contents, true);
+        if(empty($arr['results'])){
+            return;
+        }
         $lat = '';
         foreach ($arr['results'] as $element) {
             $geometry = $element['geometry'];
@@ -113,7 +119,7 @@ class LocationMapPage_Controller extends Page_Controller {
         return $location;
     }
 
-    public function locationData() {
+    public function locationDatas() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
 		$infoWindowList = Location::get();
 
