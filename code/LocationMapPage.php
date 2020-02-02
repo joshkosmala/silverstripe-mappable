@@ -59,11 +59,27 @@ class LocationMapPage_Controller extends Page_Controller {
                 } else {
                     continue;
                 }
+            }
+            fclose($file);
+            $this->populateLocation();
+        }
+    }
 
+    public function populateLocation()
+    {
+        // Get the locations from the database, exclude any that don't have LatLng's defined
+        $northtelClients = NorthtelClients::get();
 
+        if ($northtelClients) {
+            $InfoWindows = array();
+            foreach ($northtelClients as $obj) {
+                if (empty($obj->Address)) continue;
+                $test = $this->getLocationFromAddress($obj->Address, $obj->City);
+                $obj->Lat = $test['lat'];
+                $obj->Lng = $test['lng'];
+                $obj->write();
             }
         }
-        fclose($file);
     }
 
     public function locationData() {
@@ -74,10 +90,9 @@ class LocationMapPage_Controller extends Page_Controller {
             $InfoWindows = array();
             foreach ($infoWindowList as $obj) {
                 if (empty($obj->Address)) continue;
-                $test = $this->getLocationFromAddress($obj->Address);
                 $InfoWindows[] = array(
-                    'lat' => $test['lat'],
-                    'lng' => $test['lng'],
+                    'lat' => $obj->Lat,
+                    'lng' => $obj->Lng,
                     'info' => $obj->Name . "<br />" . $obj->InfoWindow,
                     'iconSize' => "0.6"
                 );
@@ -88,14 +103,14 @@ class LocationMapPage_Controller extends Page_Controller {
         }
     }
 
-    public function getLocationFromAddress($address) {
+    public function getLocationFromAddress($address, $city) {
         if (empty($address)) {
             return;
         }
         //uses + between words on address
         $address = strstr($address, " ") ? str_replace(" ", "+", $address) : $address;
 
-        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address;
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address.'+'.$city;
 
         //Use file_get_contents to GET the URL in question.
         $contents = file_get_contents($url);
