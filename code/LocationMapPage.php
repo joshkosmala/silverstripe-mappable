@@ -93,7 +93,7 @@ class LocationMapPage_Controller extends Page_Controller {
                 $InfoWindows[] = array(
                     'lat' => $obj->Lat,
                     'lng' => $obj->Lng,
-                    'info' => $obj->Name . "<br />" . $obj->InfoWindow,
+                    'info' => $obj->Name,
                     'iconSize' => "0.6"
                 );
             }
