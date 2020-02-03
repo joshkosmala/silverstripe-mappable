@@ -10,7 +10,7 @@ class LocationMapPage_Controller extends Page_Controller {
         parent::init();
 
         // Add jQuery, Map API, CSS and Config to the Page
-        Requirements::javascript(MODULE_MAPPABLE_DIR . '/javascript/jquery-2.1.4.min.js');
+//        Requirements::javascript(MODULE_MAPPABLE_DIR . '/javascript/jquery-2.1.4.min.js');
         //TODO:: Remove the key, put it in settings
         Requirements::javascript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E');
         Requirements::javascript(MODULE_MAPPABLE_DIR . '/javascript/GoogleMapConfig.js');
@@ -26,7 +26,7 @@ class LocationMapPage_Controller extends Page_Controller {
 
     public function importAddressFile()
     {
-        $conn = mysqli_connect("localhost", "root", "root", "subbase");
+        $conn = mysqli_connect("localhost", "root", "root", "northtel2");
 
         if (isset($_POST["file"])) {
 
@@ -110,7 +110,7 @@ class LocationMapPage_Controller extends Page_Controller {
         //uses + between words on address
         $address = strstr($address, " ") ? str_replace(" ", "+", $address) : $address;
 
-        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address.'+'.$city;
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address.'+'.$city."+New+Zealand";
 
         //Use file_get_contents to GET the URL in question.
         $contents = file_get_contents($url);

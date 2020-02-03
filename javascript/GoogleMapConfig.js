@@ -13,10 +13,10 @@ function initialize() {
     // default to New Zealand TODO: make this a part of the admin
     var mapInitialView = {
         center: {
-            lat: -41.07935114946898,
-            lng: 172.46337890625
+            lat: -35.7295591,
+            lng: 174.3278445
         },
-        zoom: 5,
+        zoom: 7,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     // get the map element
@@ -41,7 +41,6 @@ function initialize() {
             for (var i = 0, length = locations.length; i < length; i++) {
 
                 var locationData = locations[i];
-                debugger;
                 var icon = {
 
                     path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
@@ -52,13 +51,15 @@ function initialize() {
                     scale: parseFloat(locationData.iconSize)
                 };
 
-                new google.maps.Marker({
+                var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(locationData.lat, locationData.lng),
                     map: map,
                     draggable: false,
                     icon: icon,
                     zIndex : -20
                 });
+                // bindInfoWindow(marker, map, infowindow, locationData.info);
+
                 // map.panTo(new google.maps.LatLng(locationData.lat, locationData.lng));
 
                 // var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);
