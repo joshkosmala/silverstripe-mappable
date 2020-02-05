@@ -13,11 +13,13 @@ function initialize() {
     // default to New Zealand TODO: make this a part of the admin
     var mapInitialView = {
         center: {
-            lat: -35.7295591,
-            lng: 174.3278445
+            lat: -35.032842,
+            lng: 173.906054
         },
-        zoom: 7,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        zoom: 8,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        zoomControl: false,
+        streetViewControl: false
     };
     // get the map element
     var polyLine;

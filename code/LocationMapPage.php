@@ -3,7 +3,6 @@
 class LocationMapPage extends Page {
 
 }
-
 class LocationMapPage_Controller extends Page_Controller {
 
     public function init() {
@@ -24,6 +23,8 @@ class LocationMapPage_Controller extends Page_Controller {
         'locationData', 'importAddressFile', 'getLocationFromAddress'
     );
 
+    //To the import process run effectively, the file needs to be exported as the database colummn sequence ordered. eg: Name, Email, Phone, Address, City
+    //IMPORTANT: Always check the database on connection credentials line
     public function importAddressFile()
     {
         $conn = mysqli_connect("localhost", "root", "root", "northtel2");
@@ -88,13 +89,14 @@ class LocationMapPage_Controller extends Page_Controller {
 
         if ($infoWindowList) {
             $InfoWindows = array();
+            $latitudes[] = array();
             foreach ($infoWindowList as $obj) {
                 if (empty($obj->Address)) continue;
-                $InfoWindows[] = array(
+                    $InfoWindows[] = array(
                     'lat' => $obj->Lat,
                     'lng' => $obj->Lng,
                     'info' => $obj->Name . "<br />" . $obj->InfoWindow,
-                    'iconSize' => "0.6"
+                    'iconSize' => "0.8"
                 );
             }
             $InfoWindowsJson = Convert::array2json($InfoWindows);
@@ -132,26 +134,6 @@ class LocationMapPage_Controller extends Page_Controller {
 
 //        return json_encode($location);
         return $location;
-    }
-
-    public function locationDatas() {
-        // Get the locations from the database, exclude any that don't have LatLng's defined
-		$infoWindowList = Location::get();
-
-        if ($infoWindowList) {
-            $InfoWindows = array();
-            foreach ($infoWindowList as $obj) {
-                $InfoWindows[] = array(
-                    'lat' => $obj->lat,
-                    'lng' => $obj->lng,
-                    'info' => $obj->Name . "<br />" . $obj->InfoWindow,
-                    'iconSize' => $obj->IconSize
-                );
-            }
-            $InfoWindowsJson = Convert::array2json($InfoWindows);
-            // Return a JSON object for GoogleMapConfig.js to use
-            return $InfoWindowsJson;
-        }
     }
 
     public function Map() {
