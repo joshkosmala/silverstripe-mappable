@@ -13,13 +13,19 @@ function initialize() {
     // default to New Zealand TODO: make this a part of the admin
     var mapInitialView = {
         center: {
-            lat: -35.032842,
-            lng: 173.906054
+            lat: -35.379338,
+            lng: 174.147351
         },
         zoom: 8,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         zoomControl: false,
-        streetViewControl: false
+        streetViewControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        rotateControl: false,
+        fullscreenControl: false,
+        disableDoubleClickZoom: true,
+        draggable: false
     };
     // get the map element
     var polyLine;
@@ -36,7 +42,7 @@ function initialize() {
     });
     // the ajax object, populated with address and infoWindow
     $.ajax({
-        url: window.location.href +'/new-location-map-page-2/locationData',
+        url: window.location.origin +'/location-map-page/locationData',
         type: 'GET',
         success: function (result) {
             var locations = JSON.parse(result);

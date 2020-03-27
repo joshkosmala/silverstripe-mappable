@@ -20,7 +20,7 @@ class LocationMapPage_Controller extends Page_Controller {
     }
 
     private static $allowed_actions = array(
-        'locationData', 'importAddressFile', 'getLocationFromAddress'
+        'locationData', 'importAddressFile', 'getLocationFromAddress', 'populateLocation'
     );
 
     //To the import process run effectively, the file needs to be exported as the database colummn sequence ordered. eg: Name, Email, Phone, Address, City
@@ -43,6 +43,7 @@ class LocationMapPage_Controller extends Page_Controller {
                 $name = $column[0];
                 if (!empty($column[0])) {
                     $name = strstr($column[0], "'") ? str_replace("'", "''", $column[0]) : $column[0];
+                    $name = preg_replace('/[^0-9\'/\']/g', '', $name);
                 }
                 $northtelClients = NorthtelClients::get()->where(" Name = '" . $name . "' OR Email = '" . $column[1] . "'")->exists();
                 if (!$northtelClients) {
@@ -69,7 +70,7 @@ class LocationMapPage_Controller extends Page_Controller {
     public function populateLocation()
     {
         // Get the locations from the database, exclude any that don't have LatLng's defined
-        $northtelClients = NorthtelClients::get();
+        $northtelClients = PhoneBookDetail::get();
 
         if ($northtelClients) {
             $InfoWindows = array();
@@ -85,7 +86,7 @@ class LocationMapPage_Controller extends Page_Controller {
 
     public function locationData() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
-        $infoWindowList = NorthtelClients::get();
+        $infoWindowList = PhoneBookDetail::get();
 
         if ($infoWindowList) {
             $InfoWindows = array();
