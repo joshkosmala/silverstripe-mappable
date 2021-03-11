@@ -18,7 +18,7 @@
                     class="btn btn-default" type="button">Search</button></a>
 
             <a id="searchButton" href=''
-               onclick="this.href='stockists/?search='+document.getElementById('search').value"><button
+               onclick="this.href='stockists/'"><button
                     class="btn btn-default" type="button">Clear</button></a>
         </span>
             </div>
