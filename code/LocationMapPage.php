@@ -60,6 +60,7 @@ class LocationMapPage_Controller extends Page_Controller {
 //                    continue;
 //                }
             }
+            $result = mysqli_query($conn, "commit;");
             fclose($file);
             $this->populateLocation();
         }
@@ -118,7 +119,18 @@ class LocationMapPage_Controller extends Page_Controller {
         $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address.'+'.$city.'+'.$region.'+'.$postcode;
 
         //Use file_get_contents to GET the URL in question.
-        $contents = file_get_contents($url);
+
+        $options = array(
+            "http"=>array(
+                "header"=>"User-Agent: Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.102011-10-16 20:23:10\r\n" // i.e. An iPad
+            )
+        );
+
+        $context = stream_context_create($options);
+        $contents = file_get_contents($url, false, $context);
+        var_dump($contents);
+
+//        $contents = file_get_contents($url);
 
         $arr = json_decode($contents, true);
         if(empty($arr['results'])){
