@@ -10,7 +10,7 @@
 
             <div class="content text-center">
             <div class="col-lg-6 col-md-12 col-sm-12 m-auto pb-3 input-group mobile-search">
-                <input id="search" type="text" class="form-control" placeholder="Search for post code">
+                <input id="search" type="text" class="form-control" placeholder="Search for suburb, city or postcode">
                 <span class="input-group-btn">
             <a id="searchButton" href=''
                onclick="this.href='stockists/?search='+document.getElementById('search').value"><button
