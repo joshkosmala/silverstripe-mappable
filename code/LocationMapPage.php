@@ -45,8 +45,8 @@ class LocationMapPage_Controller extends Page_Controller {
                 }
                 $northtelClients = NorthtelClients::get()->where(" Name = '" . $name . "' OR Email = '" . $column[1] . "'")->exists();
 //                if (!$northtelClients) {
-                    $sqlInsert = "INSERT into NorthtelClients (Name, Email, PhoneNumber, Address, City, Region, Postcode)
-                   values ('" . $name . "','" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "','" . $column[5] . "', ".$column[6].")";
+                    $sqlInsert = "INSERT into NorthtelClients (Name, PhoneNumber, Address, City, Region, Postcode)
+                   values ('" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "','" . $column[5] . "', ".$column[6].")";
                     $result = mysqli_query($conn, $sqlInsert);
 
                     if (!empty($result)) {
@@ -98,7 +98,7 @@ class LocationMapPage_Controller extends Page_Controller {
                 $InfoWindows[] = array(
                     'lat' => $obj->Lat,
                     'lng' => $obj->Lng,
-                    'info' => $obj->Email . '<br/> ' . $obj->Address . '<br/> ' . $obj->Postcode . '<br/><br/> ' . $obj->City . '<br/> ' . $obj->PhoneNumber,
+                    'info' => $obj->Name . '<br/> ' . $obj->Address . '<br/> ' . $obj->Postcode . '<br/><br/> ' . $obj->City . '<br/> ' . $obj->PhoneNumber,
                     'iconSize' => "0.6"
                 );
             }
