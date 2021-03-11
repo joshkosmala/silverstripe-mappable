@@ -8,18 +8,16 @@
         </h1>
             $Content
 
-            <div class="content text-center">
+            <div class="content">
             <div class="col-lg-6 col-md-12 col-sm-12 m-auto pb-3 input-group mobile-search">
                 <input id="search" type="text" class="form-control" placeholder="Search for suburb, city or postcode">
                 <span class="input-group-btn">
 
             <a id="searchButton" href=''
-               onclick="this.href='stockists/?search='+document.getElementById('search').value"><button
-                    class="btn btn-default" type="button">Search</button></a>
+               onclick="this.href='stockists/?search='+document.getElementById('search').value"><button class="btn btn-default" style=" cursor: pointer !important;" type="button">Search</button></a>
 
             <a id="searchButton" href=''
-               onclick="this.href='stockists/'"><button
-                    class="btn btn-default" type="button">Clear</button></a>
+                onclick="this.href='stockists/'"><button class="btn ml-1 clear-button"  type="button">Clear</button></a>
         </span>
             </div>
             <p>$Map</p>
