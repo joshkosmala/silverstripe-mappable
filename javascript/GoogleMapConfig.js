@@ -32,9 +32,15 @@ function initialize() {
     var infowindow = new google.maps.InfoWindow({
         content: ''
     });
+
+    var params = new URLSearchParams(window.location.search);
+    var search = params.get('search');
+    const path = window.location.origin +'/stockists/locationData';
     // the ajax object, populated with address and infoWindow
     $.ajax({
-        url: window.location.href +'/new-location-map-page-2/locationData',
+        url: search != null
+            ? path + `?search=${search}`
+            : path,
         type: 'GET',
         success: function (result) {
             var locations = JSON.parse(result);
@@ -56,9 +62,9 @@ function initialize() {
                     map: map,
                     draggable: false,
                     icon: icon,
-                    zIndex : -20
+                    zIndex : -20,
                 });
-                // bindInfoWindow(marker, map, infowindow, locationData.info);
+                bindInfoWindow(marker, map, infowindow, locationData.info);
                 // map.panTo(new google.maps.LatLng(locationData.lat, locationData.lng));
 
                 // var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);

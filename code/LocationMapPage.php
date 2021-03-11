@@ -44,9 +44,9 @@ class LocationMapPage_Controller extends Page_Controller {
                     $name = strstr($column[0], "'") ? str_replace("'", "''", $column[0]) : $column[0];
                 }
                 $northtelClients = NorthtelClients::get()->where(" Name = '" . $name . "' OR Email = '" . $column[1] . "'")->exists();
-                if (!$northtelClients) {
-                    $sqlInsert = "INSERT into NorthtelClients (Name, Email, PhoneNumber, Address, City)
-                   values ('" . $name . "','" . $column[1] . "','" . $column[2] . "','" . $column[5] . "','" . $column[6] . "')";
+//                if (!$northtelClients) {
+                    $sqlInsert = "INSERT into NorthtelClients (Name, Email, PhoneNumber, Address, City, Region, Postcode)
+                   values ('" . $name . "','" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "','" . $column[5] . "', ".$column[6].")";
                     $result = mysqli_query($conn, $sqlInsert);
 
                     if (!empty($result)) {
@@ -56,9 +56,9 @@ class LocationMapPage_Controller extends Page_Controller {
                         $type = "error";
                         $message = "Problem in Importing CSV Data";
                     }
-                } else {
-                    continue;
-                }
+//                } else {
+//                    continue;
+//                }
             }
             fclose($file);
             $this->populateLocation();
@@ -71,10 +71,9 @@ class LocationMapPage_Controller extends Page_Controller {
         $northtelClients = NorthtelClients::get();
 
         if ($northtelClients) {
-            $InfoWindows = array();
             foreach ($northtelClients as $obj) {
                 if (empty($obj->Address)) continue;
-                $test = $this->getLocationFromAddress($obj->Address, $obj->City);
+                $test = $this->getLocationFromAddress($obj->Address, $obj->City, $obj->Region, $obj->Postcode);
                 $obj->Lat = $test['lat'];
                 $obj->Lng = $test['lng'];
                 $obj->write();
@@ -84,7 +83,13 @@ class LocationMapPage_Controller extends Page_Controller {
 
     public function locationData() {
         // Get the locations from the database, exclude any that don't have LatLng's defined
-        $infoWindowList = NorthtelClients::get();
+        $search = Controller::curr()->getRequest()->getVar('search');
+        if (!empty($search) && $search != 'null') {
+            $infoWindowList = NorthtelClients::get()->where("Postcode = '". $search . "' OR " . "Address like '%". $search . "%' OR " . "City = '". $search . "'" . " OR " . "Region = '". $search . "'");
+
+        } else {
+            $infoWindowList = NorthtelClients::get();
+        }
 
         if ($infoWindowList) {
             $InfoWindows = array();
@@ -93,7 +98,7 @@ class LocationMapPage_Controller extends Page_Controller {
                 $InfoWindows[] = array(
                     'lat' => $obj->Lat,
                     'lng' => $obj->Lng,
-                    'info' => $obj->Name,
+                    'info' => $obj->Email . '<br/> ' . $obj->Address . '<br/> ' . $obj->Postcode . '<br/><br/> ' . $obj->City . '<br/> ' . $obj->PhoneNumber,
                     'iconSize' => "0.6"
                 );
             }
@@ -103,14 +108,14 @@ class LocationMapPage_Controller extends Page_Controller {
         }
     }
 
-    public function getLocationFromAddress($address, $city) {
+    public function getLocationFromAddress($address, $city, $region, $postcode) {
         if (empty($address)) {
             return;
         }
         //uses + between words on address
         $address = strstr($address, " ") ? str_replace(" ", "+", $address) : $address;
 
-        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address.'+'.$city;
+        $url = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E&address='.$address.'+'.$city.'+'.$region.'+'.$postcode;
 
         //Use file_get_contents to GET the URL in question.
         $contents = file_get_contents($url);
@@ -156,6 +161,10 @@ class LocationMapPage_Controller extends Page_Controller {
 
     public function Map() {
         // The element to house the map
-        return '<div id="map_canvas"></div>';
+        $param = Controller::curr()->getRequest()->getVar('search');
+        $map = '<div id="map_canvas"></div>';
+        return !empty($param) && $param != 'null'
+            ? 'Filtering by ' . $param . $map
+            : $map;
     }
 }

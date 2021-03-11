@@ -8,8 +8,10 @@ class NorthtelClients extends DataObject {
         "PhoneNumber" => "Varchar(255)",
         "Address" => "Varchar(255)",
         "City" => "Varchar(255)",
+        "Region" => "Varchar(255)",
         'Lat' => 'Double',
         'Lng' => 'Double',
+        'Postcode' => 'Varchar(10)',
     );
 
 	public static $summary_fields = array(
