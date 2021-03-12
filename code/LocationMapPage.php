@@ -86,7 +86,7 @@ class LocationMapPage_Controller extends Page_Controller {
         // Get the locations from the database, exclude any that don't have LatLng's defined
         $search = Controller::curr()->getRequest()->getVar('search');
         if (!empty($search) && $search != 'null') {
-            $infoWindowList = NorthtelClients::get()->where("Postcode = '". $search . "' OR " . "Address like '%". $search . "%' OR " . "City = '". $search . "'" . " OR " . "Region = '". $search . "'");
+            $infoWindowList = NorthtelClients::get()->where("Postcode = '". $search . "' OR " . "Address like '%". $search . "%' OR " . "Name like '%". $search . "%' OR " . "City = '". $search . "'" . " OR " . "Region = '". $search . "'");
 
         } else {
             $infoWindowList = NorthtelClients::get();
