@@ -174,9 +174,9 @@ class LocationMapPage_Controller extends Page_Controller {
     public function Map() {
         // The element to house the map
         $param = Controller::curr()->getRequest()->getVar('search');
-        $map = '<div id="map_canvas"></div>';
+        $map = '<div class="mt-3" id="map_canvas"></div>';
         return !empty($param) && $param != 'null'
-            ? 'Filtering by ' . $param . $map
+            ? '<div class="text-center">Filtering by ' . $param . $map . '</div>'
             : $map;
     }
 }
