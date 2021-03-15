@@ -6,9 +6,9 @@ class StockistAdmin extends ModelAdmin {
         'Stockist'
 	);
 
-	private static $url_segment = 'distributers';
+	private static $url_segment = 'stockists';
 
-	private static $menu_title = 'Distributers';
+	private static $menu_title = 'Stockists';
 
 	private static $menu_icon = 'mappable/images/ic_my_location_black_24dp_1x.png'; // TODO: use MODULE_MAPPABLE_DIR
 
