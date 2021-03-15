@@ -19,6 +19,19 @@ function initialize() {
         zoom: 5,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
+    const iconBase =
+        "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
+    const icons = {
+        parking: {
+            icon: iconBase + "parking_lot_maps.png",
+        },
+        library: {
+            icon: iconBase + "library_maps.png",
+        },
+        info: {
+            icon: iconBase + "info-i_maps.png",
+        },
+    };
     // get the map element
     var polyLine;
     var polyOptions;
@@ -47,29 +60,20 @@ function initialize() {
             for (var i = 0, length = locations.length; i < length; i++) {
 
                 var locationData = locations[i];
-                var icon = {
 
-                    path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
-                    fillColor: '#3785ff',
-                    fillOpacity: .6,
-                    anchor: new google.maps.Point(0,0),
-                    strokeWeight: 0,
-                    scale: parseFloat(locationData.iconSize)
-                };
+                // var marker = new google.maps.Marker({
+                //     position: new google.maps.LatLng(locationData.lat, locationData.lng),
+                //     map: map,
+                //     draggable: false,
+                //     zIndex : -20,
+                // });
 
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(locationData.lat, locationData.lng),
-                    map: map,
-                    draggable: false,
-                    icon: icon,
-                    zIndex : -20,
-                });
-                bindInfoWindow(marker, map, infowindow, locationData.info);
+                // bindInfoWindow(marker, map, infowindow, locationData.info);
                 // map.panTo(new google.maps.LatLng(locationData.lat, locationData.lng));
 
-                // var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);
+                var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);
                 // drop the marker on the map
-                // addMarkerWithTimeout(latLng, map, infowindow, locationData, i * 100);
+                addMarkerWithTimeout(latLng, map, infowindow, locationData, i * 10);
             }
         }
     });
@@ -99,7 +103,8 @@ function addMarkerWithTimeout(position, map, infowindow, location, timeout) {
         var marker = new google.maps.Marker({
             position: position,
             map: map,
-            animation: google.maps.Animation.DROP
+            // animation: google.maps.Animation.DROP,
+            icon: "/mappable/images/map_marker.png"
         });
         markers.push(marker);
         bindInfoWindow(marker, map, infowindow, location.info);
