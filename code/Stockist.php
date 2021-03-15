@@ -1,6 +1,6 @@
 <?php
 
-class NorthtelClients extends DataObject {
+class Stockist extends DataObject {
 
     private static $db = array(
         "Name" => "Varchar(255)",

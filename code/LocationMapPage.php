@@ -48,9 +48,9 @@ class LocationMapPage_Controller extends Page_Controller
                 if (!empty($column[0])) {
                     $name = strstr($column[0], "'") ? str_replace("'", "''", $column[0]) : $column[0];
                 }
-                $northtelClients = NorthtelClients::get()->where(" Name = '" . $name . "' OR Email = '" . $column[1] . "'")->exists();
-//                if (!$northtelClients) {
-                $sqlInsert = "INSERT into NorthtelClients (Name, PhoneNumber, Address, City, Region, Postcode)
+                $stockists = Stockist::get()->where(" Name = '" . $name . "' OR Email = '" . $column[1] . "'")->exists();
+//                if (!$stockists) {
+                $sqlInsert = "INSERT into Stockist (Name, PhoneNumber, Address, City, Region, Postcode)
                    values ('" . $column[1] . "','" . $column[2] . "','" . $column[3] . "','" . $column[4] . "','" . $column[5] . "', " . $column[6] . ")";
                 $result = mysqli_query($conn, $sqlInsert);
 
@@ -74,10 +74,10 @@ class LocationMapPage_Controller extends Page_Controller
     public function populateLocation()
     {
         // Get the locations from the database, exclude any that don't have LatLng's defined
-        $northtelClients = NorthtelClients::get();
+        $stockists = Stockist::get();
 
-        if ($northtelClients) {
-            foreach ($northtelClients as $obj) {
+        if ($stockists) {
+            foreach ($stockists as $obj) {
                 if (empty($obj->Address)) continue;
                 $test = $this->getLocationFromAddress($obj->Address, $obj->City, $obj->Region, $obj->Postcode);
                 $obj->Lat = $test['lat'];
@@ -99,10 +99,10 @@ class LocationMapPage_Controller extends Page_Controller
         }
 
         if (!empty($search) && $search != 'null') {
-            $infoWindowList = NorthtelClients::get()->where("Postcode = '" . $search . "' OR " . "Address like '%" . $search . "%' OR " . "Name like '%" . $search . "%' OR " . "City = '" . $search . "'" . " OR " . "Region = '" . $search . "'");
+            $infoWindowList = Stockist::get()->where("Postcode = '" . $search . "' OR " . "Address like '%" . $search . "%' OR " . "Name like '%" . $search . "%' OR " . "City = '" . $search . "'" . " OR " . "Region = '" . $search . "'");
 
         } else {
-            $infoWindowList = NorthtelClients::get();
+            $infoWindowList = Stockist::get();
         }
 
         if ($infoWindowList) {
@@ -134,10 +134,10 @@ class LocationMapPage_Controller extends Page_Controller
         }
 
         if (!empty($search) && $search != 'null') {
-            $infoWindowList = NorthtelClients::get()->where("Postcode = '" . $search . "' OR " . "Address like '%" . $search . "%' OR " . "Name like '%" . $search . "%' OR " . "City = '" . $search . "'" . " OR " . "Region = '" . $search . "'");
+            $infoWindowList = Stockist::get()->where("Postcode = '" . $search . "' OR " . "Address like '%" . $search . "%' OR " . "Name like '%" . $search . "%' OR " . "City = '" . $search . "'" . " OR " . "Region = '" . $search . "'");
 
         } else {
-            $infoWindowList = NorthtelClients::get()->sort('Name');
+            $infoWindowList = Stockist::get()->sort('Name');
         }
 
         return $infoWindowList;

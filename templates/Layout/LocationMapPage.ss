@@ -59,7 +59,9 @@
                                 </a>
                             <% end_loop %>
                         <% else %>
-                            No stockists found
+                            <div class="text-center">
+                                No stockists found
+                            </div>
                         <% end_if %>
 
                     </div>

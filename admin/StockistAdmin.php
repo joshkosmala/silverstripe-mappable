@@ -1,9 +1,9 @@
 <?php
 
-class NorthtelClientsAdmin extends ModelAdmin {
+class StockistAdmin extends ModelAdmin {
 
 	private static $managed_models = array(
-		'NorthtelClients'
+        'Stockist'
 	);
 
 	private static $url_segment = 'distributers';
