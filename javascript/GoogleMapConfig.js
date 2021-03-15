@@ -19,19 +19,6 @@ function initialize() {
         zoom: 5,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    const iconBase =
-        "https://developers.google.com/maps/documentation/javascript/examples/full/images/";
-    const icons = {
-        parking: {
-            icon: iconBase + "parking_lot_maps.png",
-        },
-        library: {
-            icon: iconBase + "library_maps.png",
-        },
-        info: {
-            icon: iconBase + "info-i_maps.png",
-        },
-    };
     // get the map element
     var polyLine;
     var polyOptions;
@@ -48,6 +35,7 @@ function initialize() {
 
     var params = new URLSearchParams(window.location.search);
     var search = params.get('search');
+    var gridFilter = params.get('gridFilter');
     const path = window.location.origin +'/stockists/locationData';
     // the ajax object, populated with address and infoWindow
     $.ajax({
@@ -69,11 +57,16 @@ function initialize() {
                 // });
 
                 // bindInfoWindow(marker, map, infowindow, locationData.info);
-                // map.panTo(new google.maps.LatLng(locationData.lat, locationData.lng));
+
 
                 var latLng = new google.maps.LatLng(locationData.lat, locationData.lng);
                 // drop the marker on the map
                 addMarkerWithTimeout(latLng, map, infowindow, locationData, i * 10);
+                if (gridFilter === 'true'){
+                    // map.panTo(new google.maps.LatLng(locationData.lat, locationData.lng));
+                    map.setZoom(15);
+                    map.setCenter(latLng);
+                }
             }
         }
     });
@@ -85,7 +78,7 @@ function detectBrowser() {
     var mapdiv = document.getElementById("map_canvas");
 
     mapdiv.style.width = '100%';
-    mapdiv.style.height = '500px';
+    mapdiv.style.height = '650px';
 
     //TODO: Check below
     // if (useragent.indexOf('iPhone') != -1 || useragent.indexOf('Android') != -1) {

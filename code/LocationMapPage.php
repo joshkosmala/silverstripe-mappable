@@ -26,7 +26,7 @@ class LocationMapPage_Controller extends Page_Controller
     }
 
     private static $allowed_actions = array(
-        'locationData', 'importAddressFile', 'getLocationFromAddress'
+        'locationData', 'importAddressFile', 'getLocationFromAddress', 'getRegions'
     );
 
     public function importAddressFile()
@@ -91,6 +91,9 @@ class LocationMapPage_Controller extends Page_Controller
     {
         // Get the locations from the database, exclude any that don't have LatLng's defined
         $search = Controller::curr()->getRequest()->getVar('search');
+        if ($search == 'Please select a region'){
+            $search = '';
+        }
         if (is_numeric($search)) {
             $search = $this->getRegionFromPostcode($search);
         }
@@ -117,6 +120,27 @@ class LocationMapPage_Controller extends Page_Controller
             // Return a JSON object for GoogleMapConfig.js to use
             return $InfoWindowsJson;
         }
+    }
+
+    public function locationDataList()
+    {
+        // Get the locations from the database, exclude any that don't have LatLng's defined
+        $search = Controller::curr()->getRequest()->getVar('search');
+        if ($search == 'Please select a region'){
+            $search = '';
+        }
+        if (is_numeric($search)) {
+            $search = $this->getRegionFromPostcode($search);
+        }
+
+        if (!empty($search) && $search != 'null') {
+            $infoWindowList = NorthtelClients::get()->where("Postcode = '" . $search . "' OR " . "Address like '%" . $search . "%' OR " . "Name like '%" . $search . "%' OR " . "City = '" . $search . "'" . " OR " . "Region = '" . $search . "'");
+
+        } else {
+            $infoWindowList = NorthtelClients::get()->sort('Name');
+        }
+
+        return $infoWindowList;
     }
 
     private function getRegionFromPostcode($postcode)
@@ -206,13 +230,36 @@ class LocationMapPage_Controller extends Page_Controller
         }
     }
 
-    public function Map()
+    public function FilterSummary()
     {
         // The element to house the map
         $param = Controller::curr()->getRequest()->getVar('search');
-        $map = '<div class="mt-3" id="map_canvas"></div>';
-        return !empty($param) && $param != 'null'
-            ? '<div class="text-center">Filtering by ' . $param . $map . '</div>'
-            : $map;
+        return !empty($param) && $param != 'null' && $param != 'Please select a region'
+//            ? '<div class="text-center">
+//                    <div class="" >Filtering by ' . '<div id="searchinfo">' . $param . '</div></div>
+//                </div>'
+            ? '<div class="row text-center mb-3">
+                    <div class="col-lg-12" >Filtering by <strong>' . $param . '</strong></div>
+                    <div style="display: none" id="searchinfo">' . $param . '</div>
+                </div>'
+            : '';
+    }
+
+    public function Map()
+    {
+        // The element to house the map
+        return '<div id="map_canvas"></div>';
+    }
+
+    public function getRegions()
+    {
+        $values = singleton('Location')->dbObject('Region')->enumValues();
+        $list = ArrayList::create();
+        $list->add(array('Value' => 'Please select a region'));
+
+        foreach ($values as $value) {
+            $list->add(array('Value' => $value));
+        }
+        return $list;
     }
 }
