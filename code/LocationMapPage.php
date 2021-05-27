@@ -12,7 +12,7 @@ class LocationMapPage_Controller extends Page_Controller {
         // Add jQuery, Map API, CSS and Config to the Page
         Requirements::javascript(MODULE_MAPPABLE_DIR . '/javascript/jquery-2.1.4.min.js');
         //TODO:: Remove the key, put it in settings
-        Requirements::javascript('https://maps.googleapis.com/maps/api/js?key=AIzaSyAAaa_ApoYASmy5j35SKI7q1UcLzvdxf2E');
+        Requirements::javascript('https://maps.googleapis.com/maps/api/js?key=[YOUR_KEY]');
         Requirements::javascript(MODULE_MAPPABLE_DIR . '/javascript/GoogleMapConfig.js');
 
         Requirements::css(MODULE_MAPPABLE_DIR . '/css/mappable.css');
